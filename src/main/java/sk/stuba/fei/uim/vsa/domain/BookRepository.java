@@ -18,12 +18,13 @@ public class BookRepository implements BookRepositoryInterface {
     public Optional<Book> findByTitle(String title) throws SQLException {
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery("SELECT * FROM Books WHERE title = \"" + title + "\"");
-        statement.close();
         if (resultSet.next()) {
             int id = resultSet.getInt(1);
             double price = resultSet.getDouble(3);
+            statement.close();
             return Optional.of(new Book(id, title, price));
         } else {
+            statement.close();
             return Optional.empty();
         }
     }

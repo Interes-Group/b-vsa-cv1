@@ -2,7 +2,7 @@ create table Books
 (
     id     int          not null,
     title  varchar(200) not null,
-    author varchar(200) null,
+    price  double       null,
     constraint Books_id_uindex
         unique (id)
 );
@@ -10,6 +10,6 @@ create table Books
 alter table Books
     add primary key (id);
 
-INSERT INTO vsa.Books (id, title, author) VALUES (1, 'Title 1', 'Author 1');
-INSERT INTO vsa.Books (id, title, author) VALUES (2, 'Title 2', 'Author 2');
-INSERT INTO vsa.Books (id, title, author) VALUES (3, 'Title 3', 'Author 3');
+INSERT INTO Books (id, title, price) VALUES (1, 'Title 1', 10);
+INSERT INTO Books (id, title, price) VALUES (2, 'Title 2', 200);
+INSERT INTO Books (id, title, price) VALUES (3, 'Title 3', 45);

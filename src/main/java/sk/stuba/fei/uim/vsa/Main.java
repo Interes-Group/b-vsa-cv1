@@ -14,13 +14,13 @@ import java.sql.*;
 public class Main {
 
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
-        Class.forName("org.h2.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:h2:file:./database;SCHEMA=PUBLIC;DATABASE_TO_UPPER=false", "", "");
+        Class.forName("com.mysql.jdbc.Driver");
+        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/vsa", "root", "root");
 
         BookRepositoryInterface repository = new BookRepository(connection);
         BookServiceInterface service = new BookService(repository);
 
-        double cenaKnihy = service.cenaKnihy("Title");
+        double cenaKnihy = service.cenaKnihy("Title 2");
 
         connection.close();
     }
