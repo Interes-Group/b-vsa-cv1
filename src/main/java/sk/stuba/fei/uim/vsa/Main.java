@@ -2,6 +2,11 @@ package sk.stuba.fei.uim.vsa;
 
 
 import lombok.extern.slf4j.Slf4j;
+import sk.stuba.fei.uim.vsa.domain.Book;
+import sk.stuba.fei.uim.vsa.domain.BookRepository;
+import sk.stuba.fei.uim.vsa.domain.BookRepositoryInterface;
+import sk.stuba.fei.uim.vsa.service.BookService;
+import sk.stuba.fei.uim.vsa.service.BookServiceInterface;
 
 import java.sql.*;
 
@@ -9,40 +14,14 @@ import java.sql.*;
 public class Main {
 
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
-        testH2();
-        testMySql();
-    }
-
-    private static void testH2() throws SQLException, ClassNotFoundException {
         Class.forName("org.h2.Driver");
-        log.info("Testing H2 embedded database");
-        testConnection("jdbc:h2:file:./database;SCHEMA=PUBLIC;DATABASE_TO_UPPER=false", "", "");
-    }
+        Connection connection = DriverManager.getConnection("jdbc:h2:file:./database;SCHEMA=PUBLIC;DATABASE_TO_UPPER=false", "", "");
 
-    private static void testMySql() throws ClassNotFoundException, SQLException {
-        Class.forName("com.mysql.jdbc.Driver");
-        log.info("Testing MySQL database");
-        testConnection("jdbc:mysql://localhost/vsa", "root", "root");
-    }
+        BookRepositoryInterface repository = new BookRepository(connection);
+        BookServiceInterface service = new BookService(repository);
 
-    private static void testConnection(String url, String user, String password) throws SQLException {
-        Connection connection = DriverManager.getConnection(url, user, password);
+        double cenaKnihy = service.cenaKnihy("Title");
 
-        Statement statement = connection.createStatement();
-        String sql = "SELECT * FROM Books";
-        ResultSet resultSet = statement.executeQuery(sql);
-
-        while (resultSet.next()) {
-            int id = resultSet.getInt(1);
-            String title = resultSet.getString(2);
-            String author = resultSet.getString(3);
-
-            Book book = new Book(id, title, author);
-            log.info(book.toString());
-        }
-
-        resultSet.close();
-        statement.close();
         connection.close();
     }
 }
